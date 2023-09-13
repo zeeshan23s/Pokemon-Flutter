@@ -29,4 +29,14 @@ export 'views/authentication/forms/forgot_password_form.dart';
 // Other Exports
 export 'responsive.dart';
 export 'constants.dart';
-export 'customized_model_sheet.dart';
+export 'functions.dart';
+
+// Firebase Exports
+export 'package:firebase_core/firebase_core.dart';
+export 'firebase_options.dart';
+export 'package:firebase_auth/firebase_auth.dart';
+
+// Bloc Exports
+export 'package:bloc/bloc.dart';
+export 'package:flutter_bloc/flutter_bloc.dart';
+export 'cubits/auth/auth_cubit.dart';

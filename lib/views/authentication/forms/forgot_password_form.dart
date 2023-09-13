@@ -7,7 +7,7 @@ class ForgotPasswordForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return FormBuilder(
       key: _formKey,
       child: SizedBox(
         height: Responsive.screenHeight(context) * 0.8,
@@ -57,7 +57,28 @@ class ForgotPasswordForm extends StatelessWidget {
                     ),
                     SizedBox(height: Responsive.screenHeight(context) * 0.03),
                     CustomizedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          try {
+                            await FirebaseAuth.instance
+                                .sendPasswordResetEmail(
+                                    email: _formKey
+                                        .currentState!.fields['email']!.value)
+                                .whenComplete(() {
+                              CustomizedDialogBox.errorDialogBox(
+                                  context,
+                                  'Reset Password',
+                                  'Password reset email have been send to your email!');
+                            });
+                          } on FirebaseException catch (e) {
+                            CustomizedDialogBox.errorDialogBox(
+                                context, 'Error', e.message ?? " ");
+                          } catch (e) {
+                            CustomizedDialogBox.errorDialogBox(
+                                context, 'Error', e.toString());
+                          }
+                        }
+                      },
                       label: 'Submit',
                       backgroundColor: AppColors.kPrimaryColor,
                       foregroundColor: AppColors.kScaffoldColor,

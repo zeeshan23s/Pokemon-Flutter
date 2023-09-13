@@ -18,7 +18,10 @@ class DefaultScreen extends StatelessWidget {
             SizedBox(height: Responsive.screenHeight(context) * 0.02),
             CustomizedButton(
                 label: 'Logout',
-                onPressed: () {},
+                onPressed: () {
+                  final authCubit = BlocProvider.of<AuthCubit>(context);
+                  authCubit.signOut();
+                },
                 backgroundColor: AppColors.kPrimaryColor,
                 foregroundColor: AppColors.kScaffoldColor)
           ],

@@ -13,14 +13,14 @@ class _SignUpFormState extends State<SignUpForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return FormBuilder(
       key: _formKey,
       child: SizedBox(
         height: Responsive.screenHeight(context) * 0.8,
         child: Column(
           children: [
-            Expanded(
-              flex: 10,
+            SizedBox(
+              height: Responsive.screenHeight(context) * 0.7,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Responsive.screenHeight(context) * 0.04,
@@ -57,8 +57,10 @@ class _SignUpFormState extends State<SignUpForm> {
                         prefixIcon: const Icon(Icons.person),
                         validator: FormBuilderValidators.compose([
                           FormBuilderValidators.required(),
-                          FormBuilderValidators.match(r'[a-zA-Z]',
-                              errorText: "Name can only be alphabets!"),
+                          FormBuilderValidators.match(
+                            r'^[a-zA-Z ]+$', // Allow alphabets and spaces
+                            errorText: 'Only alphabets and spaces are allowed',
+                          ),
                         ]),
                       ),
                       SizedBox(
@@ -97,11 +99,47 @@ class _SignUpFormState extends State<SignUpForm> {
                         validator: FormBuilderValidators.required(),
                       ),
                       SizedBox(height: Responsive.screenHeight(context) * 0.03),
-                      CustomizedButton(
-                        onPressed: () {},
-                        label: 'Sign Up',
-                        backgroundColor: AppColors.kPrimaryColor,
-                        foregroundColor: AppColors.kScaffoldColor,
+                      BlocConsumer<AuthCubit, AuthState>(
+                        builder: (context, state) {
+                          if (state is AuthLoading) {
+                            return CustomizedButton(
+                              onPressed: () {},
+                              label: 'Sign Up',
+                              backgroundColor: AppColors.kPrimaryColor,
+                              foregroundColor: AppColors.kScaffoldColor,
+                              isLoading: true,
+                            );
+                          } else {
+                            return CustomizedButton(
+                              onPressed: () {
+                                if (_formKey.currentState!.validate()) {
+                                  final authCubit =
+                                      BlocProvider.of<AuthCubit>(context);
+                                  authCubit.signUpWithEmailAndPassword(
+                                    _formKey
+                                        .currentState!.fields['email']!.value,
+                                    _formKey.currentState!.fields['password']!
+                                        .value,
+                                    _formKey
+                                        .currentState!.fields['name']!.value,
+                                  );
+                                }
+                              },
+                              label: 'Sign Up',
+                              backgroundColor: AppColors.kPrimaryColor,
+                              foregroundColor: AppColors.kScaffoldColor,
+                            );
+                          }
+                        },
+                        listener: (context, state) {
+                          if (state is AuthError) {
+                            CustomizedDialogBox.errorDialogBox(
+                                context, 'Error', state.error.toString());
+                          }
+                          if (state is Authenticated) {
+                            Navigator.pop(context);
+                          }
+                        },
                       )
                     ],
                   ),

@@ -41,7 +41,8 @@ class AuthScreen extends StatelessWidget {
                 children: [
                   CustomizedButton(
                       label: 'Create Account',
-                      onPressed: () {},
+                      onPressed: () => CustomizedModelSheets.bottomSheet(
+                          context: context, child: const SignUpForm()),
                       backgroundColor: AppColors.kPrimaryColor,
                       foregroundColor: AppColors.kScaffoldColor),
                   SizedBox(height: Responsive.screenHeight(context) * 0.025),

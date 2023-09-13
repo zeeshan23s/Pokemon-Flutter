@@ -19,8 +19,8 @@ class _LoginFormState extends State<LoginForm> {
         height: Responsive.screenHeight(context) * 0.8,
         child: Column(
           children: [
-            Expanded(
-              flex: 10,
+            SizedBox(
+              height: Responsive.screenHeight(context) * 0.7,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                     vertical: Responsive.screenHeight(context) * 0.04,
@@ -108,11 +108,44 @@ class _LoginFormState extends State<LoginForm> {
                       ),
                     ),
                     SizedBox(height: Responsive.screenHeight(context) * 0.03),
-                    CustomizedButton(
-                      onPressed: () {},
-                      label: 'Login',
-                      backgroundColor: AppColors.kPrimaryColor,
-                      foregroundColor: AppColors.kScaffoldColor,
+                    BlocConsumer<AuthCubit, AuthState>(
+                      builder: ((context, state) {
+                        if (state is AuthLoading) {
+                          return CustomizedButton(
+                            onPressed: () {},
+                            label: 'Login',
+                            backgroundColor: AppColors.kPrimaryColor,
+                            foregroundColor: AppColors.kScaffoldColor,
+                            isLoading: true,
+                          );
+                        } else {
+                          return CustomizedButton(
+                            onPressed: () {
+                              if (_formKey.currentState!.validate()) {
+                                final authCubit =
+                                    BlocProvider.of<AuthCubit>(context);
+                                authCubit.signInWithEmailAndPassword(
+                                    _formKey
+                                        .currentState!.fields['email']!.value,
+                                    _formKey.currentState!.fields['password']!
+                                        .value);
+                              }
+                            },
+                            label: 'Login',
+                            backgroundColor: AppColors.kPrimaryColor,
+                            foregroundColor: AppColors.kScaffoldColor,
+                          );
+                        }
+                      }),
+                      listener: (context, state) {
+                        if (state is AuthError) {
+                          CustomizedDialogBox.errorDialogBox(
+                              context, 'Error', state.error.toString());
+                        }
+                        if (state is Authenticated) {
+                          Navigator.pop(context);
+                        }
+                      },
                     )
                   ],
                 ),

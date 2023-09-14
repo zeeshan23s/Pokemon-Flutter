@@ -6,10 +6,10 @@ part 'pokemon_state.dart';
 
 class PokemonCubit extends Cubit<PokemonState> {
   PokemonCubit() : super(PokemonInitial()) {
-    getPokemonList('https://pokeapi.co/api/v2/pokemon/', 1);
+    getPokemonList('https://pokeapi.co/api/v2/pokemon/');
   }
 
-  Future<void> getPokemonList(String url, int pageIndex) async {
+  Future<void> getPokemonList(String url) async {
     emit(PokemonLoading());
     final List<Pokemon> pokemons = [];
 
@@ -26,8 +26,8 @@ class PokemonCubit extends Cubit<PokemonState> {
             width: pokemonData['weight'].toString()));
       }
 
-      emit(PokemonLoaded(pokemonListData['next'], pokemonListData['previous'],
-          pageIndex, pokemons));
+      emit(PokemonLoaded(
+          pokemonListData['next'], pokemonListData['previous'], pokemons));
     } catch (e) {
       emit(PokemonError(e.toString()));
     }

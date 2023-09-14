@@ -9,10 +9,9 @@ class PokemonLoading extends PokemonState {}
 class PokemonLoaded extends PokemonState {
   final String? next;
   final String? previous;
-  final int pageIndex;
   final List<Pokemon> pokemon;
 
-  PokemonLoaded(this.next, this.previous, this.pageIndex, this.pokemon);
+  PokemonLoaded(this.next, this.previous, this.pokemon);
 }
 
 class PokemonError extends PokemonState {

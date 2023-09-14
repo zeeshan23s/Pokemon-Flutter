@@ -10,6 +10,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   bool _isOpen = false;
 
+  int pageIndex = 1;
+
   @override
   void initState() {
     super.initState();
@@ -17,6 +19,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void config() async {
+    final pokemonCubit = BlocProvider.of<PokemonCubit>(context);
+    pokemonCubit.getPokemonList('https://pokeapi.co/api/v2/pokemon/');
     final authCubit = BlocProvider.of<AuthCubit>(context);
     final lastState = authCubit.state;
     if (lastState is Authenticated) {
@@ -118,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ),
                                       child: index == 1
                                           ? Text(
-                                              state.pageIndex.toString(),
+                                              pageIndex.toString(),
                                               style: Theme.of(context)
                                                   .textTheme
                                                   .bodyMedium
@@ -134,14 +138,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 if (index == 0 &&
                                                     state.previous != null) {
                                                   pokemonCubit.getPokemonList(
-                                                      state.previous!,
-                                                      state.pageIndex - 1);
+                                                      state.previous!);
+                                                  setState(() {
+                                                    pageIndex = pageIndex - 1;
+                                                  });
                                                 }
                                                 if (index == 2 &&
                                                     state.next != null) {
                                                   pokemonCubit.getPokemonList(
-                                                      state.next!,
-                                                      state.pageIndex + 1);
+                                                      state.next!);
+                                                  setState(() {
+                                                    pageIndex = pageIndex + 1;
+                                                  });
                                                 }
                                               },
                                               icon: Icon(

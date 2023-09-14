@@ -11,6 +11,16 @@ class _HomeScreenState extends State<HomeScreen> {
   bool _isOpen = false;
 
   @override
+  void initState() {
+    super.initState();
+    config();
+  }
+
+  void config() async {
+    await context.read<PokemonController>().getFavoritePokemon();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
@@ -46,13 +56,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                             fontWeight: FontWeight.w700),
                                   ),
                                   IconButton(
-                                      onPressed: () {
-                                        setState(() {
-                                          _isOpen = !_isOpen;
-                                        });
-                                      },
-                                      icon: const Icon(Icons.menu,
-                                          color: AppColors.kSecondaryColor))
+                                    onPressed: () {
+                                      setState(() {
+                                        _isOpen = !_isOpen;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.menu,
+                                        color: AppColors.kSecondaryColor),
+                                  )
                                 ],
                               ),
                               SizedBox(
@@ -170,54 +181,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                          _isOpen
-                              ? Positioned(
-                                  top: Responsive.screenHeight(context) * 0.055,
-                                  right:
-                                      Responsive.screenWidth(context) * 0.034,
-                                  child: Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal:
-                                            Responsive.screenWidth(context) *
-                                                0.04,
-                                        vertical:
-                                            Responsive.screenHeight(context) *
-                                                0.01),
-                                    decoration: BoxDecoration(
-                                        color: AppColors.kPrimaryColor,
-                                        borderRadius: BorderRadius.circular(
-                                            Responsive.screenWidth(context) *
-                                                0.02)),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        _menuItem(
-                                            icon: Icons.payment,
-                                            label: 'My Favorite',
-                                            onPressed: () {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const MyFavorite(),
-                                                ),
-                                              );
-                                            }),
-                                        _menuItem(
-                                            icon: Icons.logout,
-                                            label: 'Logout',
-                                            onPressed: () {
-                                              final authCubit =
-                                                  BlocProvider.of<AuthCubit>(
-                                                      context);
-                                              authCubit.signOut();
-                                            })
-                                      ],
-                                    ),
-                                  ),
-                                )
-                              : const SizedBox(),
+                          _isOpen ? dropDownMenu() : const SizedBox(),
                         ],
                       ),
                     ),
@@ -228,29 +192,44 @@ class _HomeScreenState extends State<HomeScreen> {
                       padding: EdgeInsets.symmetric(
                           vertical: Responsive.screenHeight(context) * 0.04,
                           horizontal: Responsive.screenWidth(context) * 0.04),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Stack(
                         children: [
-                          Row(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                'Home',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineLarge
-                                    ?.copyWith(
-                                        color: AppColors.kPrimaryColor,
-                                        fontWeight: FontWeight.w700),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    'Home',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headlineLarge
+                                        ?.copyWith(
+                                            color: AppColors.kPrimaryColor,
+                                            fontWeight: FontWeight.w700),
+                                  ),
+                                  IconButton(
+                                    onPressed: () {
+                                      setState(() {
+                                        _isOpen = !_isOpen;
+                                      });
+                                    },
+                                    icon: const Icon(Icons.menu,
+                                        color: AppColors.kSecondaryColor),
+                                  ),
+                                ],
                               ),
-                              IconButton(
-                                  onPressed: () {}, icon: Icon(Icons.menu))
+                              Expanded(
+                                  child: Center(
+                                child: Text('No pokemon data available!',
+                                    style:
+                                        Theme.of(context).textTheme.bodyMedium),
+                              ))
                             ],
                           ),
-                          Expanded(
-                              child: Center(
-                            child: Text('No pokemon data available!',
-                                style: Theme.of(context).textTheme.bodyMedium),
-                          ))
+                          _isOpen ? dropDownMenu() : const SizedBox(),
                         ],
                       ),
                     ),
@@ -291,6 +270,48 @@ class _HomeScreenState extends State<HomeScreen> {
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
                     color: AppColors.kScaffoldColor))
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget dropDownMenu() {
+    return Positioned(
+      top: Responsive.screenHeight(context) * 0.055,
+      right: Responsive.screenWidth(context) * 0.034,
+      child: Container(
+        padding: EdgeInsets.symmetric(
+            horizontal: Responsive.screenWidth(context) * 0.04,
+            vertical: Responsive.screenHeight(context) * 0.01),
+        decoration: BoxDecoration(
+            color: AppColors.kPrimaryColor,
+            borderRadius:
+                BorderRadius.circular(Responsive.screenWidth(context) * 0.02)),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _menuItem(
+                icon: Icons.payment,
+                label: 'My Favorite',
+                onPressed: () {
+                  setState(() {
+                    _isOpen = false;
+                  });
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MyFavorite(),
+                    ),
+                  );
+                }),
+            _menuItem(
+                icon: Icons.logout,
+                label: 'Logout',
+                onPressed: () {
+                  final authCubit = BlocProvider.of<AuthCubit>(context);
+                  authCubit.signOut();
+                })
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '../../exports.dart';
 
 class PokemonCard extends StatefulWidget {
@@ -92,24 +94,26 @@ class _PokemonCardState extends State<PokemonCard> {
                     ),
                   ),
                   SizedBox(height: Responsive.screenHeight(context) * 0.01),
-                  IconButton(
-                      onPressed: () {
-                        setState(() {
-                          if (PokemonController.favorite
-                              .contains(widget.pokemon)) {
-                            PokemonController.removeFavoritePokemon(
-                                widget.pokemon);
-                          } else {
-                            PokemonController.addFavoritePokemon(
-                                widget.pokemon);
-                          }
-                        });
-                      },
-                      icon: Icon(
-                          PokemonController.favorite.contains(widget.pokemon)
-                              ? Icons.favorite
-                              : Icons.favorite_border,
-                          color: Colors.red))
+                  Consumer<PokemonController>(
+                    builder: (context, pokemon, child) {
+                      return IconButton(
+                        onPressed: () {
+                          setState(() {
+                            if (pokemon.favorite.contains(widget.pokemon)) {
+                              pokemon.removeFavoritePokemon(widget.pokemon);
+                            } else {
+                              pokemon.addFavoritePokemon(widget.pokemon);
+                            }
+                          });
+                        },
+                        icon: Icon(
+                            pokemon.favorite.contains(widget.pokemon)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: Colors.red),
+                      );
+                    },
+                  )
                 ],
               ),
             ),

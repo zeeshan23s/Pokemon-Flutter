@@ -1,3 +1,5 @@
+import 'package:provider/provider.dart';
+
 import '../exports.dart';
 
 class MyFavorite extends StatelessWidget {
@@ -34,18 +36,21 @@ class MyFavorite extends StatelessWidget {
                 ],
               ),
               SizedBox(height: Responsive.screenHeight(context) * 0.03),
-              Expanded(
-                child: GridView(
+              Expanded(child: Consumer<PokemonController>(
+                  builder: (context, pokemon, child) {
+                return GridView(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       crossAxisSpacing: Responsive.screenWidth(context) * 0.015,
                       mainAxisExtent: Responsive.screenWidth(context) * 0.70,
                       mainAxisSpacing: Responsive.screenHeight(context) * 0.05),
-                  children: PokemonController.favorite
+                  children: pokemon.favorite
                       .asMap()
                       .entries
                       .map((pokemon) => PokemonCard(
-                          color: PokemonController.favorite
+                          color: context
+                                          .read<PokemonController>()
+                                          .favorite
                                           .indexOf(pokemon.value) %
                                       2 ==
                                   0
@@ -53,8 +58,8 @@ class MyFavorite extends StatelessWidget {
                               : AppColors.oddPokemonColor,
                           pokemon: pokemon.value))
                       .toList(),
-                ),
-              ),
+                );
+              })),
             ],
           ),
         ),

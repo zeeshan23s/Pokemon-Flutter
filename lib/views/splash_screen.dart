@@ -11,7 +11,7 @@ class SplashScreen extends StatelessWidget {
           if (state is AuthInitial) {
             return _initialBuild(context);
           } else if (state is Authenticated) {
-            return const DefaultScreen();
+            return const HomeScreen();
           } else {
             return const AuthScreen();
           }

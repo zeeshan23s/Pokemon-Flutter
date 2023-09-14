@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => AuthCubit()),
+        BlocProvider(create: (_) => PokemonCubit()),
       ],
       child: MaterialApp(
         title: 'Pokedex Pokemon',

@@ -12,11 +12,12 @@ export 'animations/entrance_faser.dart';
 // Screen Exports
 export 'views/splash_screen.dart';
 export 'views/authentication/auth_screen.dart';
-export 'views/default_screen.dart';
+export 'views/home_screen.dart';
 
 // Widgets Exports
 export 'widgets/core/customized_button.dart';
 export 'widgets/core/customized_textfield.dart';
+export 'widgets/design/pokemon_card.dart';
 
 // Validator Exports
 export 'package:form_builder_validators/form_builder_validators.dart';
@@ -40,3 +41,10 @@ export 'package:firebase_auth/firebase_auth.dart';
 export 'package:bloc/bloc.dart';
 export 'package:flutter_bloc/flutter_bloc.dart';
 export 'cubits/auth/auth_cubit.dart';
+export 'cubits/pokemon/pokemon_cubit.dart';
+
+// Model Export
+export 'models/pokemon.dart';
+
+// Service Export
+export 'services/pokemon_controller.dart';

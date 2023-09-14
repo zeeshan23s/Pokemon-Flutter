@@ -5,6 +5,9 @@ class AppColors {
   static const kSecondaryColor = Color(0xFFFEFEFE);
 
   static const kScaffoldColor = Color(0xFF171A23);
+
+  static const evenPokemonColor = Color(0xFFFFB444);
+  static const oddPokemonColor = Color(0xFFB2FFE2);
 }
 
 class AppAssets {

@@ -1,5 +1,3 @@
-import 'package:provider/provider.dart';
-
 import '../../exports.dart';
 
 class PokemonCard extends StatefulWidget {
@@ -97,14 +95,18 @@ class _PokemonCardState extends State<PokemonCard> {
                   Consumer<PokemonController>(
                     builder: (context, pokemon, child) {
                       return IconButton(
-                        onPressed: () {
-                          setState(() {
+                        onPressed: () async {
+                          final authCubit = BlocProvider.of<AuthCubit>(context);
+                          final lastState = authCubit.state;
+                          if (lastState is Authenticated) {
                             if (pokemon.favorite.contains(widget.pokemon)) {
-                              pokemon.removeFavoritePokemon(widget.pokemon);
+                              pokemon.removeFavoritePokemon(
+                                  widget.pokemon, lastState.user.uid);
                             } else {
-                              pokemon.addFavoritePokemon(widget.pokemon);
+                              pokemon.addFavoritePokemon(
+                                  widget.pokemon, lastState.user.uid);
                             }
-                          });
+                          }
                         },
                         icon: Icon(
                             pokemon.favorite.contains(widget.pokemon)

@@ -1,5 +1,3 @@
-import 'package:provider/provider.dart';
-
 import 'exports.dart';
 
 void main() async {

@@ -33,6 +33,7 @@ export 'responsive.dart';
 export 'constants.dart';
 export 'functions.dart';
 export 'package:shared_preferences/shared_preferences.dart';
+export 'package:provider/provider.dart';
 
 // Firebase Exports
 export 'package:firebase_core/firebase_core.dart';

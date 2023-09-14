@@ -17,7 +17,11 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void config() async {
-    await context.read<PokemonController>().getFavoritePokemon();
+    final authCubit = BlocProvider.of<AuthCubit>(context);
+    final lastState = authCubit.state;
+    if (lastState is Authenticated) {
+      context.read<PokemonController>().getFavoritePokemon(lastState.user.uid);
+    }
   }
 
   @override
@@ -142,8 +146,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                               },
                                               icon: Icon(
                                                 index == 0
-                                                    ? Icons.arrow_back_ios
-                                                    : Icons.arrow_forward_ios,
+                                                    ? state.previous == null
+                                                        ? Icons.stop_circle
+                                                        : Icons.arrow_back_ios
+                                                    : state.next == null
+                                                        ? Icons.stop_circle
+                                                        : Icons
+                                                            .arrow_forward_ios,
                                                 size: 15,
                                               ),
                                             ),

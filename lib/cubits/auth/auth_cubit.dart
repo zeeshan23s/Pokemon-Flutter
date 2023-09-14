@@ -13,6 +13,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
     final user = _auth.currentUser;
     if (user != null) {
+      await PokemonController.getFavoritePokemon();
       emit(Authenticated(user));
     } else {
       emit(Unauthenticated());
@@ -28,6 +29,7 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
       final User user = userCredential.user!;
+      await PokemonController.getFavoritePokemon();
       emit(Authenticated(user));
     } on FirebaseAuthException catch (e) {
       emit(AuthError(e.message ?? 'Login Unsuccessful!'));
@@ -44,6 +46,7 @@ class AuthCubit extends Cubit<AuthState> {
           .createUserWithEmailAndPassword(email: email, password: password);
       final User user = userCredential.user!;
       user.updateDisplayName(name);
+      await PokemonController.getFavoritePokemon();
       emit(Authenticated(user));
     } on FirebaseAuthException catch (e) {
       emit(AuthError(e.message ?? 'Registration Unsuccessful!'));

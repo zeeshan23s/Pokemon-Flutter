@@ -1,17 +1,19 @@
 import '../../exports.dart';
 
-class PokemonCard extends StatelessWidget {
+class PokemonCard extends StatefulWidget {
   final Color color;
-  final String name;
-  final String height;
-  final String width;
-  const PokemonCard(
-      {super.key,
-      required this.color,
-      required this.name,
-      required this.height,
-      required this.width});
+  final Pokemon pokemon;
+  const PokemonCard({
+    super.key,
+    required this.color,
+    required this.pokemon,
+  });
 
+  @override
+  State<PokemonCard> createState() => _PokemonCardState();
+}
+
+class _PokemonCardState extends State<PokemonCard> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
@@ -25,7 +27,7 @@ class PokemonCard extends StatelessWidget {
               height: Responsive.screenHeight(context) * 0.25,
               width: Responsive.screenWidth(context) * 0.45,
               decoration: BoxDecoration(
-                color: color,
+                color: widget.color,
                 borderRadius: BorderRadius.circular(
                     Responsive.screenWidth(context) * 0.08),
               ),
@@ -33,7 +35,8 @@ class PokemonCard extends StatelessWidget {
                 children: [
                   SizedBox(height: Responsive.screenHeight(context) * 0.1),
                   Text(
-                    name.replaceFirst(name[0], name[0].toUpperCase()),
+                    widget.pokemon.name!.replaceFirst(widget.pokemon.name![0],
+                        widget.pokemon.name![0].toUpperCase()),
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                         fontWeight: FontWeight.w600,
                         color: AppColors.kScaffoldColor),
@@ -54,7 +57,7 @@ class PokemonCard extends StatelessWidget {
                                 ?.copyWith(color: AppColors.kScaffoldColor),
                             children: <TextSpan>[
                               TextSpan(
-                                text: height,
+                                text: widget.pokemon.height,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -74,7 +77,7 @@ class PokemonCard extends StatelessWidget {
                                 ?.copyWith(color: AppColors.kScaffoldColor),
                             children: <TextSpan>[
                               TextSpan(
-                                text: width,
+                                text: widget.pokemon.width,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyMedium
@@ -90,9 +93,23 @@ class PokemonCard extends StatelessWidget {
                   ),
                   SizedBox(height: Responsive.screenHeight(context) * 0.01),
                   IconButton(
-                      onPressed: () {},
-                      icon:
-                          const Icon(Icons.favorite_border, color: Colors.red))
+                      onPressed: () {
+                        setState(() {
+                          if (PokemonController.favorite
+                              .contains(widget.pokemon)) {
+                            PokemonController.removeFavoritePokemon(
+                                widget.pokemon);
+                          } else {
+                            PokemonController.addFavoritePokemon(
+                                widget.pokemon);
+                          }
+                        });
+                      },
+                      icon: Icon(
+                          PokemonController.favorite.contains(widget.pokemon)
+                              ? Icons.favorite
+                              : Icons.favorite_border,
+                          color: Colors.red))
                 ],
               ),
             ),

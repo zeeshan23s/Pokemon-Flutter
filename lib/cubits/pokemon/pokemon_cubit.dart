@@ -29,7 +29,6 @@ class PokemonCubit extends Cubit<PokemonState> {
       emit(PokemonLoaded(pokemonListData['next'], pokemonListData['previous'],
           pageIndex, pokemons));
     } catch (e) {
-      debugPrint(e.toString());
       emit(PokemonError(e.toString()));
     }
   }

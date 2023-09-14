@@ -13,6 +13,7 @@ export 'animations/entrance_faser.dart';
 export 'views/splash_screen.dart';
 export 'views/authentication/auth_screen.dart';
 export 'views/home_screen.dart';
+export 'views/favorite_screen.dart';
 
 // Widgets Exports
 export 'widgets/core/customized_button.dart';
@@ -31,6 +32,7 @@ export 'views/authentication/forms/forgot_password_form.dart';
 export 'responsive.dart';
 export 'constants.dart';
 export 'functions.dart';
+export 'package:shared_preferences/shared_preferences.dart';
 
 // Firebase Exports
 export 'package:firebase_core/firebase_core.dart';

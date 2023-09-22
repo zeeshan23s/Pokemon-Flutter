@@ -15,7 +15,7 @@ Before you begin, ensure you have met the following requirements:
 Follow these steps to set up and run the Pokedex app:
 
 - Clone the repository:<br>
-***git clone https://github.com/yourusername/pokedex-app.git***
+***git clone https://github.com/zeeshan564/Pokemon-Flutter.git***
 
 - Change the directory to the project folder:<br>
 ***cd pokedex-app***

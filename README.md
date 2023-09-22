@@ -18,7 +18,7 @@ Follow these steps to set up and run the Pokedex app:
 ***git clone https://github.com/zeeshan564/Pokemon-Flutter.git***
 
 - Change the directory to the project folder:<br>
-***cd pokedex-app***
+***cd Pokemon-Flutter***
 
 - Install dependencies:
 ***flutter pub get***
